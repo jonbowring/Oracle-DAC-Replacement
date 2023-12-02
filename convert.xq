@@ -1,5 +1,6 @@
 xquery version "3.0";
 
+import module namespace jb = 'http://informatica.com' at 'functions.xq';
 declare option saxon:output "omit-xml-declaration=yes";
 
 let $tprops := <props>
@@ -70,55 +71,9 @@ let $tflow := <aetgt:getResponse xmlns:aetgt="http://schemas.active-endpoints.co
                     let $seqCount := count($steps[Q{}plan_step_order = $seq])
                     let $container := if($seqCount = 1) then (
                           let $step := $steps[Q{}plan_step_order = $seq]
-                          let $mtID := '1jY0fuy0iEUhkrHVLx78WK'
-                          
-                          return <eventContainer id="step{$seq}">
-                            <service id="service{$seq}">
-                              <title>{$step/Q{}step_name/text()}</title>
-                              <serviceName>ICSExecuteDataTask</serviceName>
-                              <serviceGUID/>
-                              <serviceInput>
-                                  <parameter name="Wait for Task to Complete" source="constant" updatable="true">true</parameter>
-                                  <parameter name="Max Wait" source="constant" updatable="true">604800</parameter>
-                                  <parameter name="Task Name" source="constant" updatable="true">mt_Example</parameter>
-                                  <parameter name="GUID" source="constant" updatable="true">{ $mtID }</parameter>
-                                  <parameter name="Task Type" source="constant" updatable="true">MCT</parameter>
-                                  <parameter name="Has Inout Parameters" source="constant" updatable="true">false</parameter>
-                                  <parameter name="taskField" source="nested">
-                                    <operation source="field" to="mt-Example">temp.{$step/Q{}step_name/text()}</operation>
-                                  </parameter>
-                              </serviceInput>
-                              <serviceOutput>
-                                  <operation source="field" to="temp.{$step/Q{}step_name/text()}/output/Object_Name">Object Name</operation>
-                                  <operation source="field" to="temp.{$step/Q{}step_name/text()}/output/Run_Id">Run Id</operation>
-                                  <operation source="field" to="temp.{$step/Q{}step_name/text()}/output/Log_Id">Log Id</operation>
-                                  <operation source="field" to="temp.{$step/Q{}step_name/text()}/output/Task_Id">Task Id</operation>
-                                  <operation source="field" to="temp.{$step/Q{}step_name/text()}/output/Task_Status">Task Status</operation>
-                                  <operation source="field" to="temp.{$step/Q{}step_name/text()}/output/Success_Source_Rows">Success Source Rows</operation>
-                                  <operation source="field" to="temp.{$step/Q{}step_name/text()}/output/Failed_Source_Rows">Failed Source Rows</operation>
-                                  <operation source="field" to="temp.{$step/Q{}step_name/text()}/output/Success_Target_Rows">Success Target Rows</operation>
-                                  <operation source="field" to="temp.{$step/Q{}step_name/text()}/output/Failed_Target_Rows">Failed Target Rows</operation>
-                                  <operation source="field" to="temp.{$step/Q{}step_name/text()}/output/Start_Time">Start Time</operation>
-                                  <operation source="field" to="temp.{$step/Q{}step_name/text()}/output/End_Time">End Time</operation>
-                                  <operation source="field" to="temp.{$step/Q{}step_name/text()}/output/Error_Message">Error Message</operation>
-                                  <operation source="field" to="temp.{$step/Q{}step_name/text()}/output/TotalTransErrors">Total Transformation Errors</operation>
-                                  <operation source="field" to="temp.{$step/Q{}step_name/text()}/output/FirstErrorCode">First Error Code</operation>
-                              </serviceOutput>
-                            </service>
-                            <link id="step{$seq}Link" targetId="end"/>
-                            <events>
-                              <catch faultField="temp.{$step/Q{}step_name/text()}/fault"
-                                      id="step{$seq}FaultError"
-                                      interrupting="true"
-                                      name="error">
-                                  <suspend/>
-                              </catch>
-                              <catch faultField="temp.{$step/Q{}step_name/text()}/fault"
-                                      id="step{$seq}FaultWarning"
-                                      interrupting="true"
-                                      name="warning"/>
-                            </events>
-                        </eventContainer>
+                          let $taskID := '1jY0fuy0iEUhkrHVLx78WK' (: TODO using actual mapping task ID:)
+                          let $node := jb:addContainer($seq, $taskID, $step)
+                          return $node
                     ) else (
                       <foo/> (: TODO add parallel processing container:)
                     )
