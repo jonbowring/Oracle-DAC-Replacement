@@ -55,7 +55,7 @@ declare function jb:addContainer($seq as xs:integer, $taskID as xs:string, $next
 };
 
 declare function jb:addParallels($seq as xs:integer, $taskID as xs:string, $nextID as xs:string, $tasks as node()*) as node()* {
-    let $container := <container id="par{$seq}" type="parallel">
+    let $container := <container id="step{$seq}" type="parallel">
         <title>Parallel Paths 1</title>
         {
             for $task at $i in $tasks
