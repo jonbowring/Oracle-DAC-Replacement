@@ -62,7 +62,7 @@ let $tflow := <aetgt:getResponse xmlns:aetgt="http://schemas.active-endpoints.co
             </deployment>
             <flow id="a">
                <start id="start">
-                  <link id="startLink" targetId="step0"/>
+                  <link id="startLink" targetId="par0"/><!-- TODO update next step id -->
                </start>
 
                <!-- Start of first step in the flow -->
