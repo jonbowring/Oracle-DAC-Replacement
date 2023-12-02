@@ -9,7 +9,7 @@ let $tprops := <props>
 </props>
 
 let $plans := doc('in/plans.xml')
-let $steps := $plans//Q{}row[Q{}plan_step_order = 0] (:  TODO remove index filter :)
+let $steps := $plans//Q{}row
 let $order := for $item in distinct-values($steps//Q{}plan_step_order)
                 order by $item
                 return $item
@@ -62,19 +62,20 @@ let $tflow := <aetgt:getResponse xmlns:aetgt="http://schemas.active-endpoints.co
             </deployment>
             <flow id="a">
                <start id="start">
-                  <link id="startLink" targetId="par0"/><!-- TODO update next step id -->
+                  <link id="startLink" targetId="step{$order[1]}"/><!-- TODO update next step id -->
                </start>
 
                <!-- Start of first step in the flow -->
                 {
-                  for $seq in $order
+                  for $seq at $i in $order
+                    let $next := jb:getNextStep($i, $order)
                     let $seqCount := count($steps[Q{}plan_step_order = $seq])
                     let $tasks := $steps[Q{}plan_step_order = $seq]
                     let $taskID := '1jY0fuy0iEUhkrHVLx78WK' (: TODO using actual mapping task ID:)
                     let $container := if($seqCount = 1) then (
-                          jb:addContainer($seq, $taskID, 'end', $tasks[1]) (: TODO update next link :)
+                          jb:addContainer($seq, $taskID, $next, $tasks[1]) (: TODO update next link :)
                     ) else (
-                          jb:addParallels($seq, $taskID, 'end', $tasks) (: TODO update next link :)
+                          jb:addParallels($seq, $taskID, $next, $tasks) (: TODO update next link :)
                     )
                     return $container
                 }
