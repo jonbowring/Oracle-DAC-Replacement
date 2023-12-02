@@ -2,6 +2,13 @@ xquery version "3.0";
 
 module namespace jb="http://informatica.com";
 
+declare function jb:getNextStep($i as xs:integer?, $order as xs:anyAtomicType*) as xs:string {
+    let $len := count($order)
+    let $next := $i + 1
+    let $step := if($next > $len) then ('end') else ('step' || xs:string($order[$next]))
+    return $step
+};
+
 declare function jb:addContainer($seq as xs:integer, $taskID as xs:string, $nextID as xs:string, $task as node()*) as node()* {
   let $container := <eventContainer id="step{$seq}">
     <service id="service{$seq}">
@@ -55,7 +62,7 @@ declare function jb:addContainer($seq as xs:integer, $taskID as xs:string, $next
 };
 
 declare function jb:addParallels($seq as xs:integer, $taskID as xs:string, $nextID as xs:string, $tasks as node()*) as node()* {
-    let $container := <container id="par{$seq}" type="parallel">
+    let $container := <container id="step{$seq}" type="parallel">
         <title>Parallel Paths 1</title>
         {
             for $task at $i in $tasks
@@ -106,7 +113,7 @@ declare function jb:addParallels($seq as xs:integer, $taskID as xs:string, $next
                                             name="warning"/>
                                 </events>
                                 </eventContainer>
-                                <link id="par{$seq}flow{$i}link" targetId="par{$seq}" type="containerLink"/>
+                                <link id="par{$seq}flow{$i}link" targetId="step{$seq}" type="containerLink"/>
                             </flow>
 
                             return $flow
