@@ -31,6 +31,24 @@
                      <option name="failOnFault">false</option>
                      <option name="referenceTo">$po:mt-Example</option>                     <!-- TODO Must use the following format with [^a-zA-Z0-9] replaced with minus: $po:{{mapping task name}} --></options>
                </field>
+               <field description="" name="SDE_ORA_EmployeeDailySnapshotFact_3" type="reference">
+                  <options>
+                     <option name="failOnNotRun">false</option>
+                     <option name="failOnFault">false</option>
+                     <option name="referenceTo">$po:mt-Example</option>                     <!-- TODO Must use the following format with [^a-zA-Z0-9] replaced with minus: $po:{{mapping task name}} --></options>
+               </field>
+               <field description="" name="SDE_ORA_EmployeeDailySnapshotFact_4" type="reference">
+                  <options>
+                     <option name="failOnNotRun">false</option>
+                     <option name="failOnFault">false</option>
+                     <option name="referenceTo">$po:mt-Example</option>                     <!-- TODO Must use the following format with [^a-zA-Z0-9] replaced with minus: $po:{{mapping task name}} --></options>
+               </field>
+               <field description="" name="TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review" type="reference">
+                  <options>
+                     <option name="failOnNotRun">false</option>
+                     <option name="failOnFault">false</option>
+                     <option name="referenceTo">$po:mt-Example</option>                     <!-- TODO Must use the following format with [^a-zA-Z0-9] replaced with minus: $po:{{mapping task name}} --></options>
+               </field>
             </tempFields>
             <notes/>
             <deployment skipIfRunning="false" suspendOnFault="false" tracingLevel="verbose">
@@ -40,47 +58,186 @@
                <start id="start">
                   <link id="startLink" targetId="step0"/>
                </start>               <!-- Start of first step in the flow -->
-               <eventContainer xmlns="" id="step0">
-                  <service id="service0">
-                     <title>SDE_ORA_EmployeeDailySnapshotFact_2</title>
-                     <serviceName>ICSExecuteDataTask</serviceName>
-                     <serviceGUID/>
-                     <serviceInput>
-                        <parameter name="Wait for Task to Complete" source="constant" updatable="true">true</parameter>
-                        <parameter name="Max Wait" source="constant" updatable="true">604800</parameter>
-                        <parameter name="Task Name" source="constant" updatable="true">mt_Example</parameter>
-                        <parameter name="GUID" source="constant" updatable="true">1jY0fuy0iEUhkrHVLx78WK</parameter>
-                        <parameter name="Task Type" source="constant" updatable="true">MCT</parameter>
-                        <parameter name="Has Inout Parameters" source="constant" updatable="true">false</parameter>
-                        <parameter name="taskField" source="nested">
-                           <operation source="field" to="mt-Example">temp.SDE_ORA_EmployeeDailySnapshotFact_2</operation>
-                        </parameter>
-                     </serviceInput>
-                     <serviceOutput>
-                        <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Object_Name">Object Name</operation>
-                        <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Run_Id">Run Id</operation>
-                        <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Log_Id">Log Id</operation>
-                        <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Task_Id">Task Id</operation>
-                        <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Task_Status">Task Status</operation>
-                        <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Success_Source_Rows">Success Source Rows</operation>
-                        <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Failed_Source_Rows">Failed Source Rows</operation>
-                        <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Success_Target_Rows">Success Target Rows</operation>
-                        <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Failed_Target_Rows">Failed Target Rows</operation>
-                        <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Start_Time">Start Time</operation>
-                        <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/End_Time">End Time</operation>
-                        <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Error_Message">Error Message</operation>
-                        <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/TotalTransErrors">Total Transformation Errors</operation>
-                        <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/FirstErrorCode">First Error Code</operation>
-                     </serviceOutput>
-                  </service>
-                  <link id="step0Link" targetId="end"/>
-                  <events>
-                     <catch faultField="temp.SDE_ORA_EmployeeDailySnapshotFact_2/fault" id="step0FaultError" interrupting="true" name="error">
-                        <suspend/>
-                     </catch>
-                     <catch faultField="temp.SDE_ORA_EmployeeDailySnapshotFact_2/fault" id="step0FaultWarning" interrupting="true" name="warning"/>
-                  </events>
-               </eventContainer>
+               <container xmlns="" id="par0" type="parallel">
+                  <title>Parallel Paths 1</title>
+                  <flow id="par0flow1">
+                     <eventContainer id="par0step1">
+                        <service id="par0service1">
+                           <title>SDE_ORA_EmployeeDailySnapshotFact_2</title>
+                           <serviceName>ICSExecuteDataTask</serviceName>
+                           <serviceGUID/>
+                           <serviceInput>
+                              <parameter name="Wait for Task to Complete" source="constant" updatable="true">true</parameter>
+                              <parameter name="Max Wait" source="constant" updatable="true">604800</parameter>
+                              <parameter name="Task Name" source="constant" updatable="true">mt_Example</parameter>                              <!-- TODO Update dynamically -->
+                              <parameter name="GUID" source="constant" updatable="true">1jY0fuy0iEUhkrHVLx78WK</parameter>
+                              <parameter name="Task Type" source="constant" updatable="true">MCT</parameter>
+                              <parameter name="Has Inout Parameters" source="constant" updatable="true">false</parameter>
+                              <parameter name="taskField" source="nested">
+                                 <operation source="field" to="mt-Example">temp.SDE_ORA_EmployeeDailySnapshotFact_2</operation>
+                              </parameter>
+                           </serviceInput>
+                           <serviceOutput>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Object_Name">Object Name</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Run_Id">Run Id</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Log_Id">Log Id</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Task_Id">Task Id</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Task_Status">Task Status</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Success_Source_Rows">Success Source Rows</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Failed_Source_Rows">Failed Source Rows</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Success_Target_Rows">Success Target Rows</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Failed_Target_Rows">Failed Target Rows</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Start_Time">Start Time</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/End_Time">End Time</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/Error_Message">Error Message</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/TotalTransErrors">Total Transformation Errors</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_2/output/FirstErrorCode">First Error Code</operation>
+                           </serviceOutput>
+                        </service>
+                        <events>
+                           <catch faultField="temp.SDE_ORA_EmployeeDailySnapshotFact_2/fault" id="step0FaultError1" interrupting="true" name="error">
+                              <suspend/>
+                           </catch>
+                           <catch faultField="temp.SDE_ORA_EmployeeDailySnapshotFact_2/fault" id="step0FaultWarning1" interrupting="true" name="warning"/>
+                        </events>
+                     </eventContainer>
+                     <link id="par0flow1link" targetId="par0" type="containerLink"/>
+                  </flow>
+                  <flow id="par0flow2">
+                     <eventContainer id="par0step2">
+                        <service id="par0service2">
+                           <title>SDE_ORA_EmployeeDailySnapshotFact_3</title>
+                           <serviceName>ICSExecuteDataTask</serviceName>
+                           <serviceGUID/>
+                           <serviceInput>
+                              <parameter name="Wait for Task to Complete" source="constant" updatable="true">true</parameter>
+                              <parameter name="Max Wait" source="constant" updatable="true">604800</parameter>
+                              <parameter name="Task Name" source="constant" updatable="true">mt_Example</parameter>                              <!-- TODO Update dynamically -->
+                              <parameter name="GUID" source="constant" updatable="true">1jY0fuy0iEUhkrHVLx78WK</parameter>
+                              <parameter name="Task Type" source="constant" updatable="true">MCT</parameter>
+                              <parameter name="Has Inout Parameters" source="constant" updatable="true">false</parameter>
+                              <parameter name="taskField" source="nested">
+                                 <operation source="field" to="mt-Example">temp.SDE_ORA_EmployeeDailySnapshotFact_3</operation>
+                              </parameter>
+                           </serviceInput>
+                           <serviceOutput>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_3/output/Object_Name">Object Name</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_3/output/Run_Id">Run Id</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_3/output/Log_Id">Log Id</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_3/output/Task_Id">Task Id</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_3/output/Task_Status">Task Status</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_3/output/Success_Source_Rows">Success Source Rows</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_3/output/Failed_Source_Rows">Failed Source Rows</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_3/output/Success_Target_Rows">Success Target Rows</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_3/output/Failed_Target_Rows">Failed Target Rows</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_3/output/Start_Time">Start Time</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_3/output/End_Time">End Time</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_3/output/Error_Message">Error Message</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_3/output/TotalTransErrors">Total Transformation Errors</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_3/output/FirstErrorCode">First Error Code</operation>
+                           </serviceOutput>
+                        </service>
+                        <events>
+                           <catch faultField="temp.SDE_ORA_EmployeeDailySnapshotFact_3/fault" id="step0FaultError2" interrupting="true" name="error">
+                              <suspend/>
+                           </catch>
+                           <catch faultField="temp.SDE_ORA_EmployeeDailySnapshotFact_3/fault" id="step0FaultWarning2" interrupting="true" name="warning"/>
+                        </events>
+                     </eventContainer>
+                     <link id="par0flow2link" targetId="par0" type="containerLink"/>
+                  </flow>
+                  <flow id="par0flow3">
+                     <eventContainer id="par0step3">
+                        <service id="par0service3">
+                           <title>SDE_ORA_EmployeeDailySnapshotFact_4</title>
+                           <serviceName>ICSExecuteDataTask</serviceName>
+                           <serviceGUID/>
+                           <serviceInput>
+                              <parameter name="Wait for Task to Complete" source="constant" updatable="true">true</parameter>
+                              <parameter name="Max Wait" source="constant" updatable="true">604800</parameter>
+                              <parameter name="Task Name" source="constant" updatable="true">mt_Example</parameter>                              <!-- TODO Update dynamically -->
+                              <parameter name="GUID" source="constant" updatable="true">1jY0fuy0iEUhkrHVLx78WK</parameter>
+                              <parameter name="Task Type" source="constant" updatable="true">MCT</parameter>
+                              <parameter name="Has Inout Parameters" source="constant" updatable="true">false</parameter>
+                              <parameter name="taskField" source="nested">
+                                 <operation source="field" to="mt-Example">temp.SDE_ORA_EmployeeDailySnapshotFact_4</operation>
+                              </parameter>
+                           </serviceInput>
+                           <serviceOutput>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_4/output/Object_Name">Object Name</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_4/output/Run_Id">Run Id</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_4/output/Log_Id">Log Id</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_4/output/Task_Id">Task Id</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_4/output/Task_Status">Task Status</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_4/output/Success_Source_Rows">Success Source Rows</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_4/output/Failed_Source_Rows">Failed Source Rows</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_4/output/Success_Target_Rows">Success Target Rows</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_4/output/Failed_Target_Rows">Failed Target Rows</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_4/output/Start_Time">Start Time</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_4/output/End_Time">End Time</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_4/output/Error_Message">Error Message</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_4/output/TotalTransErrors">Total Transformation Errors</operation>
+                              <operation source="field" to="temp.SDE_ORA_EmployeeDailySnapshotFact_4/output/FirstErrorCode">First Error Code</operation>
+                           </serviceOutput>
+                        </service>
+                        <events>
+                           <catch faultField="temp.SDE_ORA_EmployeeDailySnapshotFact_4/fault" id="step0FaultError3" interrupting="true" name="error">
+                              <suspend/>
+                           </catch>
+                           <catch faultField="temp.SDE_ORA_EmployeeDailySnapshotFact_4/fault" id="step0FaultWarning3" interrupting="true" name="warning"/>
+                        </events>
+                     </eventContainer>
+                     <link id="par0flow3link" targetId="par0" type="containerLink"/>
+                  </flow>
+                  <flow id="par0flow4">
+                     <eventContainer id="par0step4">
+                        <service id="par0service4">
+                           <title>TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review</title>
+                           <serviceName>ICSExecuteDataTask</serviceName>
+                           <serviceGUID/>
+                           <serviceInput>
+                              <parameter name="Wait for Task to Complete" source="constant" updatable="true">true</parameter>
+                              <parameter name="Max Wait" source="constant" updatable="true">604800</parameter>
+                              <parameter name="Task Name" source="constant" updatable="true">mt_Example</parameter>                              <!-- TODO Update dynamically -->
+                              <parameter name="GUID" source="constant" updatable="true">1jY0fuy0iEUhkrHVLx78WK</parameter>
+                              <parameter name="Task Type" source="constant" updatable="true">MCT</parameter>
+                              <parameter name="Has Inout Parameters" source="constant" updatable="true">false</parameter>
+                              <parameter name="taskField" source="nested">
+                                 <operation source="field" to="mt-Example">temp.TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review</operation>
+                              </parameter>
+                           </serviceInput>
+                           <serviceOutput>
+                              <operation source="field" to="temp.TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review/output/Object_Name">Object Name</operation>
+                              <operation source="field" to="temp.TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review/output/Run_Id">Run Id</operation>
+                              <operation source="field" to="temp.TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review/output/Log_Id">Log Id</operation>
+                              <operation source="field" to="temp.TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review/output/Task_Id">Task Id</operation>
+                              <operation source="field" to="temp.TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review/output/Task_Status">Task Status</operation>
+                              <operation source="field" to="temp.TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review/output/Success_Source_Rows">Success Source Rows</operation>
+                              <operation source="field" to="temp.TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review/output/Failed_Source_Rows">Failed Source Rows</operation>
+                              <operation source="field" to="temp.TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review/output/Success_Target_Rows">Success Target Rows</operation>
+                              <operation source="field" to="temp.TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review/output/Failed_Target_Rows">Failed Target Rows</operation>
+                              <operation source="field" to="temp.TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review/output/Start_Time">Start Time</operation>
+                              <operation source="field" to="temp.TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review/output/End_Time">End Time</operation>
+                              <operation source="field" to="temp.TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review/output/Error_Message">Error Message</operation>
+                              <operation source="field" to="temp.TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review/output/TotalTransErrors">Total Transformation Errors</operation>
+                              <operation source="field" to="temp.TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review/output/FirstErrorCode">First Error Code</operation>
+                           </serviceOutput>
+                        </service>
+                        <events>
+                           <catch faultField="temp.TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review/fault" id="step0FaultError4" interrupting="true" name="error">
+                              <suspend/>
+                           </catch>
+                           <catch faultField="temp.TASK_GROUP_Extract_EmployeeDailySnapshotFact_Performance_Review/fault" id="step0FaultWarning4" interrupting="true" name="warning"/>
+                        </events>
+                     </eventContainer>
+                     <link id="par0flow4link" targetId="par0" type="containerLink"/>
+                  </flow>
+                  <link id="par0flow1link1" targetId="par0flow1" type="containerLink"/>
+                  <link id="par0flow2link2" targetId="par0flow2" type="containerLink"/>
+                  <link id="par0flow3link3" targetId="par0flow3" type="containerLink"/>
+                  <link id="par0flow4link4" targetId="par0flow4" type="containerLink"/>
+                  <link id="par0link" targetId="end"/>
+               </container>
                <end id="end"/>
             </flow>
             <dependencies>

@@ -9,7 +9,7 @@ let $tprops := <props>
 </props>
 
 let $plans := doc('in/plans.xml')
-let $steps := $plans//Q{}row[1] (:  TODO remove index filter :)
+let $steps := $plans//Q{}row[Q{}plan_step_order = 0] (:  TODO remove index filter :)
 let $order := for $item in distinct-values($steps//Q{}plan_step_order)
                 order by $item
                 return $item
@@ -69,13 +69,12 @@ let $tflow := <aetgt:getResponse xmlns:aetgt="http://schemas.active-endpoints.co
                 {
                   for $seq in $order
                     let $seqCount := count($steps[Q{}plan_step_order = $seq])
+                    let $tasks := $steps[Q{}plan_step_order = $seq]
+                    let $taskID := '1jY0fuy0iEUhkrHVLx78WK' (: TODO using actual mapping task ID:)
                     let $container := if($seqCount = 1) then (
-                          let $step := $steps[Q{}plan_step_order = $seq]
-                          let $taskID := '1jY0fuy0iEUhkrHVLx78WK' (: TODO using actual mapping task ID:)
-                          let $node := jb:addContainer($seq, $taskID, $step)
-                          return $node
+                          jb:addContainer($seq, $taskID, 'end', $tasks[1]) (: TODO update next link :)
                     ) else (
-                      <foo/> (: TODO add parallel processing container:)
+                          jb:addParallels($seq, $taskID, 'end', $tasks) (: TODO update next link :)
                     )
                     return $container
                 }
