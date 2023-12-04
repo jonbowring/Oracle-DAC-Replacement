@@ -48,7 +48,7 @@ let $tflow := <aetgt:getResponse xmlns:aetgt="http://schemas.active-endpoints.co
                       <options>
                         <option name="failOnNotRun">false</option>
                         <option name="failOnFault">false</option>
-                        <option name="referenceTo">$po:mt-Example</option> <!-- TODO Must use the following format with [^a-zA-Z0-9] replaced with minus: $po:{{mapping task name}} -->
+                        <option name="referenceTo">$po:{replace($step/Q{}step_name, '[^A-Za-z0-9\-]+', '-')}</option>
                       </options>
                   </field>
                 }
@@ -59,56 +59,29 @@ let $tflow := <aetgt:getResponse xmlns:aetgt="http://schemas.active-endpoints.co
             </deployment>
             <flow id="a">
                <start id="start">
-                  <link id="startLink" targetId="step{$order[1]}"/><!-- TODO update next step id -->
+                  <link id="startLink" targetId="step{$order[1]}"/>
                </start>
-
-               <!-- Start of first step in the flow -->
                 {
                   for $seq at $i in $order
                     let $next := jb:getNextStep($i, $order)
                     let $seqCount := count($steps[Q{}plan_step_order = $seq])
                     let $tasks := $steps[Q{}plan_step_order = $seq]
-                    let $taskID := '1jY0fuy0iEUhkrHVLx78WK' (: TODO using actual mapping task ID:)
+                    let $taskID := $steps[Q{}plan_step_order = $seq]/Q{}infa_id/text()
                     let $container := if($seqCount = 1) then (
-                          jb:addContainer($seq, $taskID, $next, $tasks[1]) (: TODO update next link :)
+                          jb:addContainer($seq, $next, $tasks[1])
                     ) else (
-                          jb:addParallels($seq, $taskID, $next, $tasks) (: TODO update next link :)
+                          jb:addParallels($seq, $next, $tasks)
                     )
                     return $container
                 }
-
                <end id="end"/>
             </flow>
             <dependencies>
-               <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
-                              displayName="mt-Example"
-                              isByCopy="true"
-                              name="mt-Example"> <!-- TODO update mapping name -->
-                  <description/>
-                  <tags/>
-                  <detail>
-                     <field label="TaskProperties Parameters"
-                            name="taskProperties"
-                            nullable="true"
-                            required="false"
-                            type="reference"/>
-                     <field label="Output Parameters"
-                            name="output"
-                            nullable="true"
-                            required="false"
-                            type="reference"/>
-                     <field label="Fault"
-                            name="fault"
-                            nullable="true"
-                            required="false"
-                            type="reference"/>
-                     <field label="Max Wait (Seconds)"
-                            name="Max_Wait"
-                            nullable="true"
-                            required="false"
-                            type="int"/>
-                  </detail>
-               </processObject>
+               {
+                  for $step in $steps
+                     let $dependency := jb:addDependency($step)
+                     return $dependency
+               } 
             </dependencies>
          </taskflow>
       </types1:Entry>
