@@ -1,3 +1,0 @@
-java -Xmx14000M -cp ../saxon-he-10.5.jar net.sf.saxon.Query -q:convert.xq -o:out/Explore/Default/tf_Example.TASKFLOW.xml
-Get-FileHash -Algorithm SHA256 "out/Explore/Default/tf_Example.TASKFLOW.xml"
-tar -acf import.zip -C out *
