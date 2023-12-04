@@ -9,7 +9,41 @@ declare function jb:getNextStep($i as xs:integer?, $order as xs:anyAtomicType*) 
     return $step
 };
 
-declare function jb:addContainer($seq as xs:integer, $taskID as xs:string, $nextID as xs:string, $task as node()*) as node()* {
+declare function jb:addDependency($task as node()*) as node()* {
+  let $dependency := <processObject xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2011/06/avosHostEnvironment.xsd"
+                                    displayName="{replace(data($task/Q{}step_name), '[^A-Za-z0-9\-]+', '-')}"
+                                    isByCopy="true"
+                                    name="{replace(data($task/Q{}step_name), '[^A-Za-z0-9\-]+', '-')}">
+                        <description/>
+                        <tags/>
+                        <detail>
+                            <field label="TaskProperties Parameters"
+                                name="taskProperties"
+                                nullable="true"
+                                required="false"
+                                type="reference"/>
+                            <field label="Output Parameters"
+                                name="output"
+                                nullable="true"
+                                required="false"
+                                type="reference"/>
+                            <field label="Fault"
+                                name="fault"
+                                nullable="true"
+                                required="false"
+                                type="reference"/>
+                            <field label="Max Wait (Seconds)"
+                                name="Max_Wait"
+                                nullable="true"
+                                required="false"
+                                type="int"/>
+                        </detail>
+                    </processObject>
+
+  return $dependency
+};
+
+declare function jb:addContainer($seq as xs:integer, $nextID as xs:string, $task as node()*) as node()* {
   let $container := <eventContainer xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2010/10/avosScreenflow.xsd" id="step{$seq}">
     <service id="service{$seq}">
       <title>{$task/Q{}step_name/text()}</title>
@@ -18,12 +52,12 @@ declare function jb:addContainer($seq as xs:integer, $taskID as xs:string, $next
       <serviceInput>
           <parameter name="Wait for Task to Complete" source="constant" updatable="true">true</parameter>
           <parameter name="Max Wait" source="constant" updatable="true">604800</parameter>
-          <parameter name="Task Name" source="constant" updatable="true">mt_Example</parameter><!-- TODO Update dynamically -->
-          <parameter name="GUID" source="constant" updatable="true">{ $taskID }</parameter>
+          <parameter name="Task Name" source="constant" updatable="true">{$task/Q{}step_name/text()}</parameter>
+          <parameter name="GUID" source="constant" updatable="true">{ $task/Q{}infa_id/text() }</parameter>
           <parameter name="Task Type" source="constant" updatable="true">MCT</parameter>
           <parameter name="Has Inout Parameters" source="constant" updatable="true">false</parameter>
           <parameter name="taskField" source="nested">
-            <operation source="field" to="mt-Example">temp.{$task/Q{}step_name/text()}</operation>
+            <operation source="field" to="{replace(data($task/Q{}step_name), '[^A-Za-z0-9\-]+', '-')}">temp.{$task/Q{}step_name/text()}</operation>
           </parameter>
       </serviceInput>
       <serviceOutput>
@@ -61,9 +95,9 @@ declare function jb:addContainer($seq as xs:integer, $taskID as xs:string, $next
   return $container
 };
 
-declare function jb:addParallels($seq as xs:integer, $taskID as xs:string, $nextID as xs:string, $tasks as node()*) as node()* {
+declare function jb:addParallels($seq as xs:integer, $nextID as xs:string, $tasks as node()*) as node()* {
     let $container := <container xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2010/10/avosScreenflow.xsd" id="step{$seq}" type="parallel">
-        <title>Parallel Paths 1</title>
+        <title>Parallel Paths {$seq}</title>
         {
             for $task at $i in $tasks
                 let $flow := <flow id="par{$seq}flow{$i}">
@@ -75,12 +109,12 @@ declare function jb:addParallels($seq as xs:integer, $taskID as xs:string, $next
                                     <serviceInput>
                                         <parameter name="Wait for Task to Complete" source="constant" updatable="true">true</parameter>
                                         <parameter name="Max Wait" source="constant" updatable="true">604800</parameter>
-                                        <parameter name="Task Name" source="constant" updatable="true">mt_Example</parameter><!-- TODO Update dynamically -->
-                                        <parameter name="GUID" source="constant" updatable="true">{ $taskID }</parameter>
+                                        <parameter name="Task Name" source="constant" updatable="true">{$task/Q{}step_name/text()}</parameter>
+                                        <parameter name="GUID" source="constant" updatable="true">{$task/Q{}infa_id/text()}</parameter>
                                         <parameter name="Task Type" source="constant" updatable="true">MCT</parameter>
                                         <parameter name="Has Inout Parameters" source="constant" updatable="true">false</parameter>
                                         <parameter name="taskField" source="nested">
-                                            <operation source="field" to="mt-Example">temp.{$task/Q{}step_name/text()}</operation>
+                                            <operation source="field" to="{replace(data($task/Q{}step_name), '[^A-Za-z0-9\-]+', '-')}">temp.{$task/Q{}step_name/text()}</operation>
                                         </parameter>
                                     </serviceInput>
                                     <serviceOutput>
