@@ -2,11 +2,8 @@ xquery version "3.0";
 
 import module namespace jb = 'http://informatica.com' at 'functions.xq';
 declare option saxon:output "omit-xml-declaration=yes";
-
-let $tprops := <props>
-  <id>aJDWwb7VFSmbzZ86glzi99</id>
-  <name>tf_Example</name>
-</props>
+declare variable $tname as xs:string external;
+declare variable $tflowid as xs:string external;
 
 let $plans := doc('in/plans.xml')
 let $steps := $plans//Q{}row
@@ -18,7 +15,7 @@ let $tflow := <aetgt:getResponse xmlns:aetgt="http://schemas.active-endpoints.co
                    xmlns:types1="http://schemas.active-endpoints.com/appmodules/repository/2010/10/avrepository.xsd">
    <types1:Item>
       <types1:EntryId>3RKWa-gt-522578-2023-12-01T22:58:53.881Z::tf.xml</types1:EntryId>
-      <types1:Name>{ $tprops/name/text() }</types1:Name>
+      <types1:Name>{ $tname }</types1:Name>
       <types1:MimeType>application/xml+taskflow</types1:MimeType>
       <types1:Description/>
       <types1:AppliesTo/>
@@ -35,8 +32,8 @@ let $tflow := <aetgt:getResponse xmlns:aetgt="http://schemas.active-endpoints.co
          <taskflow xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2010/10/avosScreenflow.xsd"
                    xmlns:tfm="http://schemas.active-endpoints.com/appmodules/screenflow/2021/04/taskflowModel.xsd"
                    xmlns:list="urn:activevos:spi:list:functions"
-                   displayName="{ $tprops/name/text() }"
-                   name="{ $tprops/name/text() }"
+                   displayName="{ $tname }"
+                   name="{ $tname }"
                    overrideAPIName="false">
             <parameterSet xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2021/04/taskflowModel.xsd"/>
             <appliesTo/>
@@ -115,8 +112,8 @@ let $tflow := <aetgt:getResponse xmlns:aetgt="http://schemas.active-endpoints.co
             </dependencies>
          </taskflow>
       </types1:Entry>
-      <types1:GUID>{ $tprops/id/text() }</types1:GUID>
-      <types1:DisplayName>{ $tprops/name/text() }</types1:DisplayName>
+      <types1:GUID>{ $tflowid }</types1:GUID>
+      <types1:DisplayName>{ $tname }</types1:DisplayName>
    </types1:Item>
    <types1:CurrentServerDateTime>2023-12-01T22:59:59.17Z</types1:CurrentServerDateTime>
 </aetgt:getResponse>
