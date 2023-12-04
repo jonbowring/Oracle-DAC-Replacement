@@ -10,7 +10,7 @@ declare function jb:getNextStep($i as xs:integer?, $order as xs:anyAtomicType*) 
 };
 
 declare function jb:addContainer($seq as xs:integer, $taskID as xs:string, $nextID as xs:string, $task as node()*) as node()* {
-  let $container := <eventContainer id="step{$seq}">
+  let $container := <eventContainer xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2010/10/avosScreenflow.xsd" id="step{$seq}">
     <service id="service{$seq}">
       <title>{$task/Q{}step_name/text()}</title>
       <serviceName>ICSExecuteDataTask</serviceName>
@@ -62,7 +62,7 @@ declare function jb:addContainer($seq as xs:integer, $taskID as xs:string, $next
 };
 
 declare function jb:addParallels($seq as xs:integer, $taskID as xs:string, $nextID as xs:string, $tasks as node()*) as node()* {
-    let $container := <container id="step{$seq}" type="parallel">
+    let $container := <container xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2010/10/avosScreenflow.xsd" id="step{$seq}" type="parallel">
         <title>Parallel Paths 1</title>
         {
             for $task at $i in $tasks
