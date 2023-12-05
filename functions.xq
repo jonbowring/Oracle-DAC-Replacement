@@ -43,7 +43,7 @@ declare function jb:addDependency($task as node()*) as node()* {
   return $dependency
 };
 
-declare function jb:addContainer($seq as xs:integer, $nextID as xs:string, $task as node()*) as node()* {
+declare function jb:addContainer($seq as xs:integer, $nextID as xs:string, $task as node()*, $params as node()*) as node()* {
   let $container := <eventContainer xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2010/10/avosScreenflow.xsd" id="step{$seq}">
     <service id="service{$seq}">
       <title>{$task/Q{}step_name/text()}</title>
@@ -55,7 +55,7 @@ declare function jb:addContainer($seq as xs:integer, $nextID as xs:string, $task
           <parameter name="Task Name" source="constant" updatable="true">{$task/Q{}step_name/text()}</parameter>
           <parameter name="GUID" source="constant" updatable="true">{ $task/Q{}infa_id/text() }</parameter>
           <parameter name="Task Type" source="constant" updatable="true">MCT</parameter>
-          <parameter name="Has Inout Parameters" source="constant" updatable="true">false</parameter>
+          <parameter name="Has Inout Parameters" source="constant" updatable="true">{if(count($params//Q{}row[Q{}step_wid = $task/Q{}step_wid]) > 0) then ('true') else ('false')}</parameter>
           <parameter name="taskField" source="nested">
             <operation source="field" to="{replace(data($task/Q{}step_name), '[^A-Za-z0-9\-]+', '-')}">temp.{$task/Q{}step_name/text()}</operation>
           </parameter>
@@ -75,6 +75,11 @@ declare function jb:addContainer($seq as xs:integer, $nextID as xs:string, $task
           <operation source="field" to="temp.{$task/Q{}step_name/text()}/output/Error_Message">Error Message</operation>
           <operation source="field" to="temp.{$task/Q{}step_name/text()}/output/TotalTransErrors">Total Transformation Errors</operation>
           <operation source="field" to="temp.{$task/Q{}step_name/text()}/output/FirstErrorCode">First Error Code</operation>
+            {
+                for $param in $params//Q{}row[Q{}step_wid = $task/Q{}step_wid]
+                    let $name := replace(replace($param/Q{}name/text(),'^\$+',''),'[^\w]+','_')
+                    return <operation source="field" to="temp.{$task/Q{}step_name/text()}/inout/{$name}">{$name}</operation>
+            }
       </serviceOutput>
     </service>
     <link id="step{$seq}Link" targetId="{$nextID}"/>
@@ -95,7 +100,7 @@ declare function jb:addContainer($seq as xs:integer, $nextID as xs:string, $task
   return $container
 };
 
-declare function jb:addParallels($seq as xs:integer, $nextID as xs:string, $tasks as node()*) as node()* {
+declare function jb:addParallels($seq as xs:integer, $nextID as xs:string, $tasks as node()*, $params as node()*) as node()* {
     let $container := <container xmlns="http://schemas.active-endpoints.com/appmodules/screenflow/2010/10/avosScreenflow.xsd" id="step{$seq}" type="parallel">
         <title>Parallel Paths {$seq}</title>
         {
@@ -112,7 +117,7 @@ declare function jb:addParallels($seq as xs:integer, $nextID as xs:string, $task
                                         <parameter name="Task Name" source="constant" updatable="true">{$task/Q{}step_name/text()}</parameter>
                                         <parameter name="GUID" source="constant" updatable="true">{$task/Q{}infa_id/text()}</parameter>
                                         <parameter name="Task Type" source="constant" updatable="true">MCT</parameter>
-                                        <parameter name="Has Inout Parameters" source="constant" updatable="true">false</parameter>
+                                        <parameter name="Has Inout Parameters" source="constant" updatable="true">{if(count($params//Q{}row[Q{}step_wid = $task/Q{}step_wid]) > 0) then ('true') else ('false')}</parameter>
                                         <parameter name="taskField" source="nested">
                                             <operation source="field" to="{replace(data($task/Q{}step_name), '[^A-Za-z0-9\-]+', '-')}">temp.{$task/Q{}step_name/text()}</operation>
                                         </parameter>
@@ -132,6 +137,11 @@ declare function jb:addParallels($seq as xs:integer, $nextID as xs:string, $task
                                         <operation source="field" to="temp.{$task/Q{}step_name/text()}/output/Error_Message">Error Message</operation>
                                         <operation source="field" to="temp.{$task/Q{}step_name/text()}/output/TotalTransErrors">Total Transformation Errors</operation>
                                         <operation source="field" to="temp.{$task/Q{}step_name/text()}/output/FirstErrorCode">First Error Code</operation>
+                                        {
+                                            for $param in $params//Q{}row[Q{}step_wid = $task/Q{}step_wid]
+                                                let $name := replace(replace($param/Q{}name/text(),'^\$+',''),'[^\w]+','_')
+                                                return <operation source="field" to="temp.{$task/Q{}step_name/text()}/inout/{$name}">{$name}</operation>
+                                        }
                                     </serviceOutput>
                                 </service>
                                 <events>

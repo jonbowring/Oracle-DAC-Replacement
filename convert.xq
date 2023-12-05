@@ -6,6 +6,7 @@ declare variable $tname as xs:string external;
 declare variable $tflowid as xs:string external;
 
 let $plans := doc('in/plans.xml')
+let $params := doc('in/params.xml')
 let $steps := $plans//Q{}row
 let $order := for $item in distinct-values($steps//Q{}plan_step_order)
                 order by $item
@@ -68,9 +69,9 @@ let $tflow := <aetgt:getResponse xmlns:aetgt="http://schemas.active-endpoints.co
                     let $tasks := $steps[Q{}plan_step_order = $seq]
                     let $taskID := $steps[Q{}plan_step_order = $seq]/Q{}infa_id/text()
                     let $container := if($seqCount = 1) then (
-                          jb:addContainer($seq, $next, $tasks[1])
+                          jb:addContainer($seq, $next, $tasks[1], $params)
                     ) else (
-                          jb:addParallels($seq, $next, $tasks)
+                          jb:addParallels($seq, $next, $tasks, $params)
                     )
                     return $container
                 }
